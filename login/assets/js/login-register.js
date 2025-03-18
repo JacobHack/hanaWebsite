@@ -66,7 +66,7 @@ function loginAjax(){
     });*/
    
     if (email != "" && password != "") {
-        window.location.replace("/home.html");
+        window.location.replace("/hanaWebsite/home.html");
     } else {
         shakeModal();
     }
