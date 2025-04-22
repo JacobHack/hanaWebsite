@@ -46,13 +46,17 @@ function generateDefs($table, $con, $rowId, $rowName, $rowValue){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar sticky-top">
         <ul class="nav-list">
             <li><a href="./login/login_register_modal.html">Logout</a></li>
-            <li><a href="lhome.html">Timeline</a></li>
-            <li><a href="#about">Context</a></li>
+            <li><a href="home.php">Timeline</a></li>
             <li><a href="definitions.php">Definitions</a></li>
-            <li><a href="#contact">Other</a></li>
+            <?php
+                session_start();
+                if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+                    echo '<li><a href="/hanawebsite/login/dashboard.php">Admin Dashboard</a></li>';
+                }
+            ?>
         </ul>
     </nav>
 

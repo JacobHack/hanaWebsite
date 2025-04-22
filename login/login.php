@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user['role'] === 'admin') {
                 header("Location: /hanawebsite/login/dashboard.php");
             } else {
-                header("Location: /hanawebsite/home.html");
+                header("Location: /hanawebsite/home.php");
             }
             exit;
         }

@@ -10,13 +10,17 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-  <nav class="navbar">
+  <nav class="navbar sticky-top">
     <ul class="nav-list">
         <li><a href= "../login/login_register_modal.html">Logout</a></li>
-        <li><a href="../home.html">Timeline</a></li>
-        <li><a href="#about">Context</a></li>
+        <li><a href="../home.php">Timeline</a></li>
         <li><a href="/hanaWebsite/definitions.php">Definitions</a></li>
-        <li><a href="#contact">Other</a></li>
+        <?php
+                session_start();
+                if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+                    echo '<li><a href="/hanawebsite/login/dashboard.php">Admin Dashboard</a></li>';
+                }
+            ?>
     </ul>
   </nav>
 

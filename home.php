@@ -11,13 +11,18 @@
     <title>Home Page</title>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar sticky-top">
         <ul class="nav-list">
             <li><a href= "./login/login_register_modal.html">Logout</a></li>
-            <li><a href="home.html">Timeline</a></li>
-            <li><a href="#about">Context</a></li>
+            <li><a href="home.php">Timeline</a></li>
             <li><a href="definitions.php">Definitions</a></li>
-            <li><a href="#contact">Other</a></li>
+
+            <?php
+                session_start();
+                if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+                    echo '<li><a href="/hanawebsite/login/dashboard.php">Admin Dashboard</a></li>';
+                }
+            ?>
         </ul>
     </nav>
     <!---
@@ -32,7 +37,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1940s.html"><div class="date-content">
+                                    <a href="decades/1940s.php"><div class="date-content">
                                         <div class="date-outer" id="1940s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -52,7 +57,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1950s.html"><div class="date-content" >
+                                    <a href="decades/1950s.php"><div class="date-content" >
                                         <div class="date-outer" id="1950s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -72,7 +77,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1960s.html"><div class="date-content" >
+                                    <a href="decades/1960s.php"><div class="date-content" >
                                         <div class="date-outer" id="1960s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -92,7 +97,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1970s.html"><div class="date-content" >
+                                    <a href="decades/1970s.php"><div class="date-content" >
                                         <div class="date-outer" id="1970s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -101,7 +106,7 @@
                                         </div>
                                     </div></a>
                                     <div class="timeline-content">
-                                        <h5 class="title">Decade Summaryr</h5>
+                                        <h5 class="title">Decade Summary</h5>
                                         <p class="description">
                                             The 1970s was an era of major technological and scientific advances. In the United States perhaps the most well known event was the Watergate Scandal which led to public mistrust in the U.S. government.
                                         </p>
@@ -112,7 +117,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1980s.html"><div class="date-content" >
+                                    <a href="decades/1980s.php"><div class="date-content" >
                                         <div class="date-outer" id="1980s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -132,7 +137,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/1990s.html"><div class="date-content" >
+                                    <a href="decades/1990s.php"><div class="date-content" >
                                         <div class="date-outer" id="1990s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -152,7 +157,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/2000s.html"><div class="date-content" >
+                                    <a href="decades/2000s.php"><div class="date-content" >
                                         <div class="date-outer" id="2000s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -172,7 +177,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/2010s.html"><div class="date-content" >
+                                    <a href="decades/2010s.php"><div class="date-content" >
                                         <div class="date-outer" id="2010s">
                                             <span class="date">
                                                     <span class="month">The</span>
@@ -192,7 +197,7 @@
                                 <!-- start experience section-->
                                 <div class="timeline">
                                     <div class="icon"></div>
-                                    <a href="decades/2020s.html"><div class="date-content">
+                                    <a href="decades/2020s.php"><div class="date-content">
                                         <div class="date-outer" id="2020s">
                                             <span class="date">
                                                     <span class="month">The</span>
