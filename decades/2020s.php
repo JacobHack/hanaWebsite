@@ -15,6 +15,7 @@
         <li><a href= "../login/login_register_modal.html">Logout</a></li>
         <li><a href="../home.php">Timeline</a></li>
         <li><a href="/hanaWebsite/definitions.php">Definitions</a></li>
+        <li><a href="/hanaWebsite/matching_game.php">Matching Game</a></li>
         <?php
                 session_start();
                 if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
@@ -77,36 +78,72 @@
   });
 
   function showQuiz(eventId) {
-    fetch(`http://localhost/hanawebsite/get_quiz.php?event_id=${eventId}`)
-      .then(res => {
-        if (!res.ok) throw new Error("HTTP error! status: " + res.status);
-        return res.json();
-      })
-      .then(quiz => {
-        let html = "";
-        quiz.forEach((q, i) => {
-          html += `<div class="mb-3"><strong>Q${i + 1}: ${q.question}</strong><br>`;
-          if (q.answers.length > 0) {
-            html += "<ul>";
-            q.answers.forEach(ans => {
-              html += `<li>${ans.label}. ${ans.text}</li>`;
-            });
-            html += "</ul></div>";
-          } else {
-            html += `<em>(Open-ended)</em></div>`;
-          }
-        });
-        document.getElementById("quiz-content").innerHTML = html;
-        const modal = new bootstrap.Modal(document.getElementById("quizModal"));
-        modal.show();
-      })
-      .catch(err => {
-        console.error("Quiz fetch error:", err);
-        document.getElementById("quiz-content").innerHTML = "<em>Failed to load quiz.</em>";
-        const modal = new bootstrap.Modal(document.getElementById("quizModal"));
-        modal.show();
+  fetch(`http://localhost/hanawebsite/get_quiz.php?event_id=${eventId}`)
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP error! status: " + res.status);
+      return res.json();
+    })
+    .then(quiz => {
+      let html = '<form id="quiz-form">';
+      const answerKey = {};
+
+      quiz.forEach((q, index) => {
+        const qid = `q${index}`;
+        html += `<div class="mb-4"><strong>Q${index + 1}: ${q.question}</strong><br>`;
+
+        if (q.answers.length > 0) {
+          q.answers.forEach(ans => {
+            html += `
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="${qid}" id="${qid}_${ans.label}" value="${ans.label}">
+                <label class="form-check-label" for="${qid}_${ans.label}">
+                  ${ans.label}. ${ans.text}
+                </label>
+              </div>`;
+          });
+        } else {
+          html += `<input type="text" name="${qid}" class="form-control" placeholder="Your answer">`;
+        }
+
+        html += "</div>";
+
+        // Store correct answer (assuming you can fetch it later dynamically)
+        answerKey[qid] = q.correct_label; // you need correct_label returned from backend
       });
-  }
+
+      html += '<button type="submit" class="btn btn-primary">Submit Quiz</button>';
+      html += '</form>';
+      html += '<div id="quiz-results" class="mt-4"></div>';
+
+      document.getElementById("quiz-content").innerHTML = html;
+
+      // Now handle form submission
+      document.getElementById("quiz-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        let score = 0;
+        let total = Object.keys(answerKey).length;
+
+        for (let qid in answerKey) {
+          const selected = document.querySelector(`input[name="${qid}"]:checked`);
+          if (selected && selected.value === answerKey[qid]) {
+            score++;
+          }
+        }
+
+        document.getElementById("quiz-results").innerHTML = `<h5>You scored ${score} out of ${total}</h5>`;
+      });
+
+      const modal = new bootstrap.Modal(document.getElementById("quizModal"));
+      modal.show();
+    })
+    .catch(err => {
+      console.error("Quiz fetch error:", err);
+      document.getElementById("quiz-content").innerHTML = "<em>Failed to load quiz.</em>";
+      const modal = new bootstrap.Modal(document.getElementById("quizModal"));
+      modal.show();
+    });
+}
   </script>
 </body>
 </html>

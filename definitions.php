@@ -51,6 +51,7 @@ function generateDefs($table, $con, $rowId, $rowName, $rowValue){
             <li><a href="./login/login_register_modal.html">Logout</a></li>
             <li><a href="home.php">Timeline</a></li>
             <li><a href="definitions.php">Definitions</a></li>
+            <li><a href="matching_game.php">Matching Game</a></li>
             <?php
                 session_start();
                 if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {

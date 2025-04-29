@@ -1,43 +1,51 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
-
+header('Content-Type: application/json');
 $conn = new mysqli("localhost", "root", "", "hanawebsite");
 
-if ($conn->connect_error) {
-    die(json_encode(["error" => $conn->connect_error]));
+$event_id = intval($_GET['event_id']);
+
+// Find the quiz
+$quiz_result = $conn->query("SELECT quiz_id FROM quizzes WHERE event_id = $event_id");
+$quiz = $quiz_result->fetch_assoc();
+
+if (!$quiz) {
+    echo json_encode([]);
+    exit;
 }
 
-$event_id = isset($_GET['event_id']) ? intval($_GET['event_id']) : 0;
+$quiz_id = $quiz['quiz_id'];
 
-$sql = "
-    SELECT q.question_id, q.question_text, a.answer_label, a.answer_text
-    FROM quizzes z
-    JOIN questions q ON z.quiz_id = q.quiz_id
-    LEFT JOIN answers a ON q.question_id = a.question_id
-    WHERE z.event_id = $event_id
-    ORDER BY q.question_id, a.answer_label
-";
+// Get all questions for this quiz
+$questions_result = $conn->query("SELECT * FROM questions WHERE quiz_id = $quiz_id");
+$quiz_data = [];
 
-$result = $conn->query($sql);
-$quiz = [];
+while ($q = $questions_result->fetch_assoc()) {
+    $question_id = $q['question_id'];
 
-while ($row = $result->fetch_assoc()) {
-    $qid = $row['question_id'];
-    if (!isset($quiz[$qid])) {
-        $quiz[$qid] = [
-            "question" => $row['question_text'],
-            "answers" => []
+    // Fetch all answers for this question
+    $answers_result = $conn->query("SELECT * FROM answers WHERE question_id = $question_id");
+
+    $answers = [];
+    $correct_label = null;
+
+    while ($a = $answers_result->fetch_assoc()) {
+        $answers[] = [
+            'label' => $a['answer_label'],
+            'text' => $a['answer_text']
         ];
+
+        // For now, assume the first answer (label 'd' or manually set) is correct
+        if ($a['is_correct'] ?? 0) {
+            $correct_label = $a['answer_label'];
+        }
     }
-    if ($row['answer_label']) {
-        $quiz[$qid]["answers"][] = [
-            "label" => $row['answer_label'],
-            "text" => $row['answer_text']
-        ];
-    }
+
+    $quiz_data[] = [
+        'question' => $q['question_text'],
+        'answers' => $answers,
+        'correct_label' => $correct_label
+    ];
 }
 
-echo json_encode(array_values($quiz));
-$conn->close();
+echo json_encode($quiz_data);
 ?>
